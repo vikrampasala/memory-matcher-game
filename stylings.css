@@ -1,0 +1,385 @@
+/* --- GLOBAL SETUP --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    background-color: #1a252f;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    overflow-x: hidden;
+}
+
+.game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 25px;
+    background: #2c3e50;
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    border: 2px solid #34495e;
+    max-width: 100%;
+}
+
+h1 {
+    margin-bottom: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+/* --- DIFFICULTY PANEL --- */
+.difficulty-panel {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.diff-btn {
+    padding: 6px 14px;
+    background-color: #34495e;
+    color: #bdc3c7;
+    border: 1px solid #455a64;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: all 0.2s ease;
+}
+
+.diff-btn:hover {
+    background-color: #4f6f8f;
+    color: #fff;
+}
+
+.diff-btn.active {
+    background-color: #3498db;
+    color: white;
+    border-color: #2980b9;
+    box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+}
+
+/* --- STATS PANEL --- */
+.stats-panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 440px; 
+    gap: 10px;
+    margin-bottom: 12px;
+    font-size: 1.05rem;
+}
+
+.stat {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 6px 10px;
+    border-radius: 6px;
+    text-align: center;
+    flex: 1;
+}
+
+.high-score-bar {
+    width: 100%;
+    max-width: 440px;
+    background: rgba(241, 196, 15, 0.1);
+    border: 1px dashed #f1c40f;
+    padding: 6px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    text-align: center;
+    color: #f1c40f;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+#restart-btn, #play-again-btn, #try-again-btn {
+    padding: 8px 14px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+
+#restart-btn:hover, #play-again-btn:hover, #try-again-btn:hover {
+    background-color: #2980b9;
+}
+
+.time-warning {
+    color: #e74c3c;
+    font-weight: bold;
+    animation: pulse 1s infinite alternate;
+}
+
+.combo-active {
+    color: #f1c40f;
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(241, 196, 15, 0.5);
+}
+
+/* --- CENTERED RECTANGLE BOARD GRID LAYOUTS --- */
+.game-board {
+    display: grid;
+    gap: 10px;
+    justify-content: center;
+    align-content: center;
+    margin: 0 auto;
+}
+
+.game-board.easy {
+    grid-template-columns: repeat(4, 80px);
+    grid-template-rows: repeat(3, 80px);
+}
+
+.game-board.medium {
+    grid-template-columns: repeat(4, 80px);
+    grid-template-rows: repeat(4, 80px);
+}
+
+.game-board.hard {
+    grid-template-columns: repeat(6, 75px);
+    grid-template-rows: repeat(4, 75px);
+}
+
+/* --- FLAT CARD STYLING --- */
+.card {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.2rem;
+    font-weight: bold;
+    transition: background-color 0.15s ease, transform 0.1s ease;
+    user-select: none;
+    background: linear-gradient(135deg, #34495e, #2c3e50);
+    border: 2px solid #3498db;
+    color: #3498db;
+}
+
+.game-board.hard .card {
+    font-size: 1.8rem;
+}
+
+.card:active {
+    transform: scale(0.95);
+}
+
+.card.flipped {
+    background: linear-gradient(135deg, #1abc9c, #16a085);
+    border: 2px solid #2ecc71;
+    color: #fff;
+}
+
+.card.matched {
+    background: linear-gradient(135deg, #27ae60, #2ecc71);
+    border-color: #fff;
+    color: #fff;
+    box-shadow: 0 0 10px rgba(46, 204, 113, 0.6);
+    pointer-events: none;
+}
+
+/* --- POPUP MODAL OVERLAYS --- */
+.overlay {
+    display: none; 
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(5px);
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.overlay.show {
+    display: flex;
+}
+
+.win-message {
+    background: #2c3e50;
+    border: 2px solid #3498db;
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    width: 340px;
+}
+
+.score-breakdown {
+    background: rgba(0,0,0,0.25);
+    padding: 15px;
+    border-radius: 10px;
+    margin: 15px 0;
+    text-align: left;
+}
+
+.score-breakdown p {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.05rem;
+    margin-bottom: 5px;
+}
+
+.win-message h2 {
+    font-size: 2.2rem;
+    color: #f1c40f;
+    margin-bottom: 15px;
+}
+
+.lose-theme { border-color: #e74c3c; }
+.lose-theme h2 { color: #e74c3c; }
+.confirm-theme { border-color: #e67e22; }
+.confirm-theme h2 { color: #e67e22; }
+
+.confirm-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+#confirm-yes-btn {
+    padding: 10px 18px;
+    background-color: #e67e22;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#confirm-yes-btn:hover { background-color: #d35400; }
+
+#confirm-no-btn {
+    padding: 10px 18px;
+    background-color: #7f8c8d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#confirm-no-btn:hover { background-color: #95a5a6; }
+
+#play-again-btn, #try-again-btn {
+    margin-top: 15px;
+    width: 100%;
+}
+
+@keyframes pulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.05); }
+}
+
+/* --- BULLETPROOF POP-UP MODAL FIX --- */
+#reset-confirm-overlay {
+    display: none; 
+    position: fixed !important; /* Forces it to stay on top of everything */
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background-color: rgba(10, 15, 25, 0.9) !important; /* Premium dark background */
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    justify-content: center !important;
+    align-items: center !important;
+    z-index: 99999 !important; /* Guarantees it covers the entire game board */
+}
+
+/* Styled Alert Box */
+.reset-theme {
+    background: #2c3e50 !important;
+    border: 3px solid #e74c3c !important; /* Neon red danger border */
+    padding: 35px 25px !important;
+    border-radius: 16px !important;
+    text-align: center !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6) !important;
+    width: 350px !important;
+    max-width: 90% !important;
+    animation: modalPopUp 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.reset-theme h2 {
+    font-size: 2rem !important;
+    color: #e74c3c !important;
+    margin-bottom: 15px !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Premium styled text area block */
+.reset-theme p {
+    font-size: 1.05rem !important;
+    line-height: 1.5 !important;
+    color: #ecf0f1 !important;
+    margin-bottom: 25px !important;
+    padding: 12px 15px !important;
+    background: rgba(0, 0, 0, 0.25) !important; /* Frosted dark text well */
+    border-radius: 8px !important;
+    border-left: 4px solid #e74c3c !important;
+    text-align: left !important;
+}
+
+/* Bold alert badge wrapper for the word "ALL" */
+.alert-badge {
+    background-color: #e74c3c !important;
+    color: #fff !important;
+    padding: 1px 6px !important;
+    border-radius: 4px !important;
+    font-weight: 900 !important;
+    font-size: 0.9rem !important;
+    display: inline-block !important;
+    box-shadow: 0 0 8px rgba(231, 76, 60, 0.5);
+}
+
+/* Button Layout Row */
+.confirm-buttons {
+    display: flex !important;
+    justify-content: center !important;
+    gap: 15px !important;
+}
+
+#reset-yes-btn {
+    padding: 10px 20px !important;
+    background-color: #e74c3c !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 6px !important;
+    font-weight: bold !important;
+    cursor: pointer !important;
+    transition: background 0.2s, transform 0.1s;
+}
+#reset-yes-btn:hover { background-color: #c0392b !important; transform: scale(1.03); }
+
+#reset-no-btn {
+    padding: 10px 20px !important;
+    background-color: #7f8c8d !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 6px !important;
+    font-weight: bold !important;
+    cursor: pointer !important;
+    transition: background 0.2s, transform 0.1s;
+}
+#reset-no-btn:hover { background-color: #95a5a6 !important; transform: scale(1.03); }
+
+@keyframes modalPopUp {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}

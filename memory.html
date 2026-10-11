@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Matcher Game</title>
+    <link rel="stylesheet" href="stylings.css">
+</head>
+<body>
+
+    <div class="game-container">
+        <h1>Memory Matcher</h1>
+        
+        <!-- Difficulty Selection Toggles -->
+        <div class="difficulty-panel">
+            <button class="diff-btn" data-diff="easy">Easy</button>
+            <button class="diff-btn active" data-diff="medium">Medium</button>
+            <button class="diff-btn" data-diff="hard">Hard</button>
+        </div>
+
+        <!-- Dashboard Stats Panel -->
+        <div class="stats-panel">
+            <div class="stat">Time: <span id="timer">60</span>s</div>
+            <div class="stat">Score: <span id="score">0</span></div>
+            <div class="stat">Combo: <span id="combo">1</span>x</div>
+            <div class="stat">Moves: <span id="moves">0</span></div>
+            <button id="restart-btn">Restart</button>
+        </div>
+        
+        <!-- High Score Tracking Bar -->
+        <div class="high-score-bar">
+            🏆 Best Score (<span id="best-diff-name">Medium</span>): <span id="high-score-val">0</span>
+        </div>
+    <!-- Updated High Score Bar with Reset Button -->
+    <div class="high-score-bar">
+    🏆 Best Score (<span id="best-diff-name">Medium</span>): <span id="high-score-val">0</span>
+    <button id="clear-scores-btn" style="margin-left: 10px; padding: 2px 8px; background: #e74c3c; border: none; color: white; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: bold;">Reset Best</button>
+</div>
+    <!-- Custom High Score Reset Confirmation Modal -->
+        <div class="game-board" id="game-board"></div>
+    </div>
+
+    <!-- Victory Overlay Window -->
+    <div class="overlay" id="win-overlay">
+        <div class="win-message">
+            <h2>🎉 Victory! 🎉</h2>
+            <div class="score-breakdown">
+                <p>Base Match Score: <span id="base-score">0</span></p>
+                <p>Time Bonus (<span id="bonus-secs">0</span>s × 50): <span id="time-bonus-pts" style="color: #2ecc71;">+0</span></p>
+                <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.15); margin: 10px 0;">
+                <p style="font-size: 1.3rem;">Final Score: <span id="final-score" style="color: #f1c40f; font-weight: bold;">0</span></p>
+            </div>
+            <p id="new-high-indicator" style="color: #f1c40f; font-weight: bold; display: none; margin-bottom: 10px;">🔥 NEW HIGH SCORE! 🔥</p>
+            <p style="margin-bottom: 15px; font-size: 0.95rem; color: #bdc3c7;">Matched in <span id="final-moves">0</span> moves!</p>
+            <button id="play-again-btn">Play Again</button>
+        </div>
+    </div>
+
+    <!-- Game Over Overlay Window -->
+    <div class="overlay" id="lose-overlay">
+        <div class="win-message lose-theme">
+            <h2>⏰ Time's Up! ⏰</h2>
+            <p>You ran out of time. Try again!</p>
+            <button id="try-again-btn">Try Again</button>
+        </div>
+    </div>
+
+    <!-- Custom Settings Confirmation Overlay -->
+    <div class="overlay" id="confirm-overlay">
+        <div class="win-message confirm-theme">
+            <h2>⚠️ Restart Match?</h2>
+            <p>Changing difficulty right now will wipe your progress on this board!</p>
+            <div class="confirm-buttons">
+                <button id="confirm-yes-btn">Yes, Restart</button>
+                <button id="confirm-no-btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="cards.js" defer></script>
+</body>
+</html>
